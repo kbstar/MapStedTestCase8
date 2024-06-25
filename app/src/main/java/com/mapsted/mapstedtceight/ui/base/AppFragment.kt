@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 abstract class AppFragment<B : ViewBinding>(private val bindingReference: ViewInflate<B>) : Fragment() {
 
-    var overrideBackPress = true
+    abstract val overrideBackPress: Boolean
 
     @field:Inject
     lateinit var appDataStore: AppDataStore

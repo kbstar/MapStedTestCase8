@@ -28,5 +28,20 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="exit">Exit</string>
+    <string name="mapsted_test_case_8">Mapsted Test Case #8</string>
+    <string name="person_name">Krunal Panchal</string>
+    <string name="today_date">25th Jun 2024</string>
+    <string name="purchase_cost">Purchase Cost:</string>
+    <string name="manufacturer">Manufacturer:</string>
+    <string name="state">State:</string>
+    <string name="country">Country:</string>
+    <string name="category">Category:</string>
+    <string name="select">Select</string>
+    <string name="empty_cost">$0,00</string>
+    <string name="number_of_purchases">Number of Purchases:</string>
+    <string name="most_total_purchases">Most Total Purchases:</string>
+    <string name="building">Building:</string>
+    <string name="building_name">Building Name</string>
+    <string name="item">Item:</string>
 
 </resources>

@@ -4,19 +4,14 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
 import com.google.gson.JsonIOException
-import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
 import com.google.gson.JsonSyntaxException
 import com.google.gson.stream.MalformedJsonException
 import com.mapsted.mapstedtceight.BuildConfig
 import com.mapsted.mapstedtceight.session.AppDataStore
 import com.mapsted.mapstedtceight.session.SessionPreferences
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
-import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.HttpException
 import retrofit2.Response
@@ -45,86 +40,8 @@ class NetworkAPI @Inject constructor(private val baseUrl: String, private val co
             if (BuildConfig.DEBUG) {
                 addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
             }
-            addInterceptor(provideNullKeysInterceptor())
         }.build())
     }.build()
-
-    private fun provideNullKeysInterceptor(): Interceptor {
-        return Interceptor { chain ->
-            val response: okhttp3.Response = chain.proceed(chain.request())
-            try {
-                if (response.isSuccessful) {
-                    val responseBody = response.body
-                    val stringResponse = responseBody.string()
-                    var element = gson.fromJson(stringResponse, JsonElement::class.java)
-
-                    if (element.isJsonObject) {
-                        element = removeNullKeysFromJsonObject(element.asJsonObject)
-                        if (BuildConfig.DEBUG) {
-                            println("RetroFit Interceptor Original Response: $element")
-                            println("RetroFit Interceptor: Removed keys that has null value from response")
-                        }
-
-                        val returnBody = element.toString().toResponseBody(responseBody.contentType())
-
-                        return@Interceptor response.newBuilder()
-                            .body(returnBody)
-                            .build()
-                    } else if (element.isJsonArray) {
-                        element = removeNullKeysFromJsonArray(element.asJsonArray)
-                        if (BuildConfig.DEBUG) {
-                            println("RetroFit Interceptor Original Response: $element")
-                            println("RetroFit Interceptor: Removed keys that has null value from response")
-                        }
-
-                        val returnBody = element.toString().toResponseBody(responseBody.contentType())
-
-                        return@Interceptor response.newBuilder()
-                            .body(returnBody)
-                            .build()
-                    } else {
-                        return@Interceptor response
-                    }
-                } else {
-                    return@Interceptor response
-                }
-            } catch (e: Exception) {
-                return@Interceptor response
-            }
-        }
-    }
-
-    private fun removeNullKeysFromJsonObject(jsonObject: JsonObject): JsonObject {
-        val result = jsonObject.deepCopy()
-        jsonObject.entrySet()?.forEach { entry ->
-            entry.key?.let { key ->
-                entry.value?.let { element ->
-                    if (element.isJsonNull) {
-                        result.remove(key)
-                    } else if (element.isJsonObject) {
-                        result.add(key, removeNullKeysFromJsonObject(element.asJsonObject))
-                    } else if (element.isJsonArray) {
-                        result.add(key, removeNullKeysFromJsonArray(element.asJsonArray))
-                    }
-                }
-            }
-        }
-        return result
-    }
-
-    private fun removeNullKeysFromJsonArray(jsonArray: JsonArray): JsonArray {
-        val result = jsonArray.deepCopy()
-        jsonArray.forEachIndexed { index, element ->
-            if (element.isJsonNull) {
-                result.remove(index)
-            } else if (element.isJsonObject) {
-                result[index] = removeNullKeysFromJsonObject(element.asJsonObject)
-            } else if (element.isJsonArray) {
-                result[index] = removeNullKeysFromJsonArray(element.asJsonArray)
-            }
-        }
-        return result
-    }
 
     private fun isInternetConnected(): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -173,14 +90,6 @@ class NetworkAPI @Inject constructor(private val baseUrl: String, private val co
             }
 
             statusCode != 0 -> {
-                /*
-                val errorMessage: String = try {
-                    Gson().fromJson(errorResponse, JsonObject::class.java).get("message").asString ?: ""
-                } catch (e: Exception) {
-                    ""
-                }
-                RequestError.ResponseError(statusCode, errorMessage.trim())
-                */
                 RequestError.ResponseError(statusCode, errorResponse.trim())
             }
 
@@ -231,15 +140,11 @@ class NetworkAPI @Inject constructor(private val baseUrl: String, private val co
 
     //--------------------------------API IMPLEMENTATIONS--------------------------------
 
-    suspend fun login(uid: String) = kotlin.runCatching {
-        service.login(
-            uid = uid
-        )
+    suspend fun getBuildingData() = kotlin.runCatching {
+        service.getBuildingData()
     }.handleResult()
 
-    suspend fun getCities() = kotlin.runCatching {
-        service.getCities(
-            token = sessionPreferences.bearerToken
-        )
+    suspend fun getAnalyticData() = kotlin.runCatching {
+        service.getAnalyticData()
     }.handleResult()
 }

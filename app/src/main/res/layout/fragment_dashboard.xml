@@ -1,14 +1,357 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="DASHBOARD"
-        tools:layout_editor_absoluteX="111dp"
-        tools:layout_editor_absoluteY="341dp" />
+        android:layout_marginTop="16dp"
+        android:text="@string/mapsted_test_case_8"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/text_light_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtPersonName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/person_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textColor="@color/text_light_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtTitle" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txtDateToday"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/today_date"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:textColor="@color/text_light_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtPersonName" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/lblPurchaseCost"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/theme_light_blue"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="6dp"
+        android:text="@string/purchase_cost"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/text_light_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtDateToday" />
+
+    <LinearLayout
+        android:id="@+id/llPurchaseCost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblPurchaseCost">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/theme_light_grey"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/lblManufacturer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/manufacturer"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/text_dark_grey" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtManufacturer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/dropdwon_bg"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/select"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/text_light_grey"
+                app:drawableEndCompat="@drawable/ic_dropdown"
+                app:drawableTint="@color/text_light_grey" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtManufacturerCost"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/empty_cost"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/text_light_grey" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/theme_light_grey"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/lblCategory"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/category"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/text_dark_grey" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtCategory"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/dropdwon_bg"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/select"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/text_light_grey"
+                app:drawableEndCompat="@drawable/ic_dropdown"
+                app:drawableTint="@color/text_light_grey" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtCategoryCost"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/empty_cost"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/text_light_grey" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/theme_light_grey"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/lblCountry"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/country"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/text_dark_grey" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtCountry"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/dropdwon_bg"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/select"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/text_light_grey"
+                app:drawableEndCompat="@drawable/ic_dropdown"
+                app:drawableTint="@color/text_light_grey" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtCountryCost"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/empty_cost"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/text_light_grey" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/theme_light_grey"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/lblState"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.8"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/state"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/text_dark_grey" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtState"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/dropdwon_bg"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/select"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/text_light_grey"
+                app:drawableEndCompat="@drawable/ic_dropdown"
+                app:drawableTint="@color/text_light_grey" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtStateCost"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:text="@string/empty_cost"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/text_light_grey" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/lblNumberOfPurchases"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/theme_light_blue"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="6dp"
+        android:text="@string/number_of_purchases"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/text_light_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llPurchaseCost" />
+
+    <LinearLayout
+        android:id="@+id/llNumberOfPurchases"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/theme_light_grey"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/lblNumberOfPurchases">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/lblItem"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.8"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:text="@string/item"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/text_dark_grey" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtItem"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/dropdwon_bg"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:text="@string/select"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/text_light_grey"
+            app:drawableEndCompat="@drawable/ic_dropdown"
+            app:drawableTint="@color/text_light_grey" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtItemCost"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:text="@string/empty_cost"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/text_light_grey" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/lblMostTotalPurchases"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/theme_light_blue"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="6dp"
+        android:text="@string/most_total_purchases"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/text_light_grey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/llNumberOfPurchases" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/theme_light_grey"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/lblMostTotalPurchases">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/lblBuilding"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="16dp"
+            android:text="@string/building"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/text_dark_grey" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtBuildingCost"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:paddingHorizontal="16dp"
+            android:text="@string/building_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/text_light_grey" />
+
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

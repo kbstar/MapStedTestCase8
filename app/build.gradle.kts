@@ -27,13 +27,13 @@ android {
             isDebuggable = true
             isJniDebuggable = true
 
-            buildConfigField("String", "APP_SERVER_URL", "\"https://debug.google.com\"")
+            buildConfigField("String", "APP_SERVER_URL", "\"https://rnd-interview.mapsted.com/\"")
         }
         release {
             //proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "\"proguard-rules.pro\"")
             isMinifyEnabled = false
 
-            buildConfigField("String", "APP_SERVER_URL", "\"https://release.google.com\"")
+            buildConfigField("String", "APP_SERVER_URL", "\"https://rnd-interview.mapsted.com/\"")
         }
     }
     compileOptions {
