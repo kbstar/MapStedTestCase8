@@ -47,8 +47,11 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
         }
 
         binding.txtCategory.setOnClickListener {
-            if (!isValidSelection(1)) {
-                return@setOnClickListener
+            when {
+                viewModel.selManufacturer == null -> {
+                    binding.root.showWarning("Please Select Manufacturer first!!")
+                    return@setOnClickListener
+                }
             }
             val values = viewModel.categories.keys.map { it.toString() }.toTypedArray()
             MaterialAlertDialogBuilder(requireActivity())
@@ -62,8 +65,16 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
         }
 
         binding.txtCountry.setOnClickListener {
-            if (!isValidSelection(2)) {
-                return@setOnClickListener
+            when {
+                viewModel.selManufacturer == null -> {
+                    binding.root.showWarning("Please Select Manufacturer first!!")
+                    return@setOnClickListener
+                }
+
+                viewModel.selCategory == null -> {
+                    binding.root.showWarning("Please Select Category first!!")
+                    return@setOnClickListener
+                }
             }
             val values = viewModel.countryStates.keys.toTypedArray()
             MaterialAlertDialogBuilder(requireActivity())
@@ -77,8 +88,21 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
         }
 
         binding.txtState.setOnClickListener {
-            if (!isValidSelection(3)) {
-                return@setOnClickListener
+            when {
+                viewModel.selManufacturer == null -> {
+                    binding.root.showWarning("Please Select Manufacturer first!!")
+                    return@setOnClickListener
+                }
+
+                viewModel.selCategory == null -> {
+                    binding.root.showWarning("Please Select Category first!!")
+                    return@setOnClickListener
+                }
+
+                viewModel.selCountry == null -> {
+                    binding.root.showWarning("Please Select Country first!!")
+                    return@setOnClickListener
+                }
             }
             viewModel.selCountry?.value?.let { states ->
                 val values = states.sorted().toTypedArray()
@@ -94,8 +118,26 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
         }
 
         binding.txtItem.setOnClickListener {
-            if (!isValidSelection(4)) {
-                return@setOnClickListener
+            when {
+                viewModel.selManufacturer == null -> {
+                    binding.root.showWarning("Please Select Manufacturer first!!")
+                    return@setOnClickListener
+                }
+
+                viewModel.selCategory == null -> {
+                    binding.root.showWarning("Please Select Category first!!")
+                    return@setOnClickListener
+                }
+
+                viewModel.selCountry == null -> {
+                    binding.root.showWarning("Please Select Country first!!")
+                    return@setOnClickListener
+                }
+
+                viewModel.selState == null -> {
+                    binding.root.showWarning("Please Select State first!!")
+                    return@setOnClickListener
+                }
             }
             viewModel.selCategory?.value?.let { items ->
                 val values = items.sorted().map { it.toString() }.toTypedArray()
@@ -108,32 +150,6 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
                     }
                     .show()
             }
-        }
-    }
-
-    private fun isValidSelection(step: Int): Boolean {
-        when {
-            step <= 1 && viewModel.selManufacturer == null -> {
-                binding.root.showWarning("Please Select Manufacturer first!!")
-                return false
-            }
-
-            step <= 2 && viewModel.selCategory == null -> {
-                binding.root.showWarning("Please Select Category first!!")
-                return false
-            }
-
-            step <= 3 && viewModel.selCountry == null -> {
-                binding.root.showWarning("Please Select Manufacturer first!!")
-                return false
-            }
-
-            step <= 4 && viewModel.selState == null -> {
-                binding.root.showWarning("Please Select Manufacturer first!!")
-                return false
-            }
-
-            else -> return true
         }
     }
 
