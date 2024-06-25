@@ -37,7 +37,7 @@
     <string name="country">Country:</string>
     <string name="category">Category:</string>
     <string name="select">Select</string>
-    <string name="empty_cost">$0,00</string>
+    <string name="empty_field">--</string>
     <string name="number_of_purchases">Number of Purchases:</string>
     <string name="most_total_purchases">Most Total Purchases:</string>
     <string name="building">Building:</string>
