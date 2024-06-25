@@ -14,8 +14,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -123,9 +121,23 @@ class DashboardViewModel @Inject constructor(
     }
 
     private fun prepareData() {
-        buildingsAnalyticalData.analytics.forEach { data ->
+        val mapBuildingData = HashMap<Long, BuildingData>()
+
+        buildingsAnalyticalData.buildings.forEach { building ->
+            if (!countryStates.containsKey(building.country)) {
+                countryStates[building.country] = mutableSetOf()
+            }
+            countryStates[building.country]?.add(building.state)
+            mapBuildingData[building.id] = building
+        }
+
+        buildingsAnalyticalData.analytics.forEachIndexed { indexData, data ->
             manufactures.add(data.manufacturer)
-            data.usageStatics?.sessionInfos?.forEach { info ->
+            data.usageStatics?.sessionInfos?.forEachIndexed { indexInfo, info ->
+                mapBuildingData[info.buildingId]?.let { buildingData ->
+                    info.buildingData = buildingData
+                    buildingsAnalyticalData.analytics[indexData].usageStatics?.sessionInfos?.get(indexInfo)?.buildingData = buildingData
+                }
                 info.purchases.forEach { purchase ->
                     if (!categories.containsKey(purchase.itemCategoryId)) {
                         categories[purchase.itemCategoryId] = mutableSetOf()
@@ -133,13 +145,6 @@ class DashboardViewModel @Inject constructor(
                     categories[purchase.itemCategoryId]?.add(purchase.itemId)
                 }
             }
-        }
-
-        buildingsAnalyticalData.buildings.forEach { building ->
-            if (!countryStates.containsKey(building.country)) {
-                countryStates[building.country] = mutableSetOf()
-            }
-            countryStates[building.country]?.add(building.state)
         }
     }
 
@@ -152,8 +157,10 @@ class DashboardViewModel @Inject constructor(
                 }
 
                 data.usageStatics?.sessionInfos?.forEach { info ->
-                    if (!result.totalByBuilding.keys.contains(info.buildingId)) {
-                        result.totalByBuilding[info.buildingId] = 0.0
+                    info.buildingData?.let { buildingData ->
+                        if (!result.totalByBuilding.keys.contains(buildingData)) {
+                            result.totalByBuilding[buildingData] = 0.0
+                        }
                     }
 
                     info.purchases.forEach { purchase ->
@@ -164,12 +171,15 @@ class DashboardViewModel @Inject constructor(
                             result.itemPurchaseCount[purchase.itemId] = 0
                         }
 
-                        selManufacturer?.let { manufactur ->
-                            selCategory?.key?.let { category ->
-                                if (manufactur == data.manufacturer) {
-                                    result.totalByManufactures[data.manufacturer] = (result.totalByManufactures[data.manufacturer] ?: 0.0) + purchase.cost
-                                    result.totalByBuilding[info.buildingId] = (result.totalByBuilding[info.buildingId] ?: 0.0) + purchase.cost
+                        selManufacturer?.let { manufacturer ->
+                            if (manufacturer == data.manufacturer) {
+                                result.totalByManufactures[data.manufacturer] = (result.totalByManufactures[data.manufacturer] ?: 0.0) + purchase.cost
 
+                                info.buildingData?.let { buildingData ->
+                                    result.totalByBuilding[buildingData] = (result.totalByBuilding[buildingData] ?: 0.0) + purchase.cost
+                                }
+
+                                selCategory?.key?.let { category ->
                                     if (purchase.itemCategoryId == category) {
                                         result.totalByCategory[purchase.itemCategoryId] = (result.totalByCategory[purchase.itemCategoryId] ?: 0.0) + purchase.cost
                                         result.itemPurchaseCount[purchase.itemId] = (result.itemPurchaseCount[purchase.itemId] ?: 1) + 1
@@ -181,10 +191,26 @@ class DashboardViewModel @Inject constructor(
                 }
             }
 
-            result.totalByBuilding.maxBy { it.value }.key.let { buildingId ->
-                buildingsAnalyticalData.buildings.find { it.id == buildingId }?.let { buildingData ->
-                    result.buildingNameWithHighPurchase = buildingData.name
+            result.totalByBuilding.forEach { buildingData, cost ->
+                selCountry?.key?.let { country ->
+                    if (!result.totalByCountry.keys.contains(country)) {
+                        result.totalByCountry[country] = 0.0
+                    }
+
+                    result.totalByCountry[country] = (result.totalByCountry[country] ?: 0.0) + cost
+
+                    selState?.let { state ->
+                        if (!result.totalByState.keys.contains(state)) {
+                            result.totalByState[state] = 0.0
+                        }
+
+                        result.totalByState[state] = (result.totalByState[state] ?: 0.0) + cost
+                    }
                 }
+            }
+
+            result.totalByBuilding.maxBy { it.value }.key.let { buildingData ->
+                result.buildingNameWithHighPurchase = buildingData.name
             }
 
             statePurchaseDetails.emit(result)

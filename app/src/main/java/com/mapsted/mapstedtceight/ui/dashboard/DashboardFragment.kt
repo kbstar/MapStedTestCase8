@@ -182,15 +182,41 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
                         Locale.ENGLISH,
                         "$%.2f", (purchaseDetails.totalByManufactures[manufacturer] ?: 0.0).toFloat()
                     )
+                } ?: {
+                    binding.txtManufacturerCost.text = getString(R.string.empty_field)
                 }
+
                 viewModel.selCategory?.key?.let { categoryId ->
                     binding.txtCategoryCost.text = String.format(
                         Locale.ENGLISH,
                         "$%.2f", (purchaseDetails.totalByCategory[categoryId] ?: 0.0).toFloat()
                     )
+                } ?: {
+                    binding.txtCategoryCost.text = getString(R.string.empty_field)
                 }
+
+                viewModel.selCountry?.key?.let { country ->
+                    binding.txtCountryCost.text = String.format(
+                        Locale.ENGLISH,
+                        "$%.2f", (purchaseDetails.totalByCountry[country] ?: 0.0).toFloat()
+                    )
+                } ?: {
+                    binding.txtCountryCost.text = getString(R.string.empty_field)
+                }
+
+                viewModel.selState?.let { state ->
+                    binding.txtStateCost.text = String.format(
+                        Locale.ENGLISH,
+                        "$%.2f", (purchaseDetails.totalByState[state] ?: 0.0).toFloat()
+                    )
+                } ?: {
+                    binding.txtStateCost.text = getString(R.string.empty_field)
+                }
+
                 if (viewModel.selItemId != 0L) {
                     binding.txtItemCount.text = (purchaseDetails.itemPurchaseCount[viewModel.selItemId] ?: 0).toString()
+                } else {
+                    binding.txtItemCount.text = getString(R.string.empty_field)
                 }
 
                 binding.txtBuildingName.text = purchaseDetails.buildingNameWithHighPurchase

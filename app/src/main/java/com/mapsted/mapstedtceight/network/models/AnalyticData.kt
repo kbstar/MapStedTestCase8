@@ -39,6 +39,7 @@ data class AnalyticData(
         data class SessionInfo(
             @SerializedName("building_id") var buildingId: Long = 0,
             @SerializedName("purchases") var purchases: List<Purchase> = emptyList(),
+            var buildingData: BuildingData? = null,
         ) : Serializable {
 
             data class Purchase(
