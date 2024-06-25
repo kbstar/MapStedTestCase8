@@ -193,18 +193,22 @@ class DashboardViewModel @Inject constructor(
 
             result.totalByBuilding.forEach { buildingData, cost ->
                 selCountry?.key?.let { country ->
-                    if (!result.totalByCountry.keys.contains(country)) {
-                        result.totalByCountry[country] = 0.0
-                    }
-
-                    result.totalByCountry[country] = (result.totalByCountry[country] ?: 0.0) + cost
-
-                    selState?.let { state ->
-                        if (!result.totalByState.keys.contains(state)) {
-                            result.totalByState[state] = 0.0
+                    if (buildingData.country == country) {
+                        if (!result.totalByCountry.keys.contains(country)) {
+                            result.totalByCountry[country] = 0.0
                         }
 
-                        result.totalByState[state] = (result.totalByState[state] ?: 0.0) + cost
+                        result.totalByCountry[country] = (result.totalByCountry[country] ?: 0.0) + cost
+
+                        selState?.let { state ->
+                            if (buildingData.state == state) {
+                                if (!result.totalByState.keys.contains(state)) {
+                                    result.totalByState[state] = 0.0
+                                }
+
+                                result.totalByState[state] = (result.totalByState[state] ?: 0.0) + cost
+                            }
+                        }
                     }
                 }
             }
