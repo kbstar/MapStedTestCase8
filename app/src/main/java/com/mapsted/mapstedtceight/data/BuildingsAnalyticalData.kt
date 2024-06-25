@@ -6,4 +6,6 @@ import java.io.Serializable
 
 data class BuildingsAnalyticalData(
     val buildings: List<BuildingData>, val analytics: List<AnalyticData>
-) : Serializable
+) : Serializable {
+    
+}
