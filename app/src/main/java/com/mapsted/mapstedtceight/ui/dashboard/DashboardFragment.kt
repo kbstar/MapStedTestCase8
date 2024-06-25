@@ -47,7 +47,7 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
         }
 
         binding.txtCategory.setOnClickListener {
-            if (!isValidSelection()) {
+            if (!isValidSelection(1)) {
                 return@setOnClickListener
             }
             val values = viewModel.categories.keys.map { it.toString() }.toTypedArray()
@@ -62,7 +62,7 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
         }
 
         binding.txtCountry.setOnClickListener {
-            if (!isValidSelection()) {
+            if (!isValidSelection(2)) {
                 return@setOnClickListener
             }
             val values = viewModel.countryStates.keys.toTypedArray()
@@ -77,7 +77,7 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
         }
 
         binding.txtState.setOnClickListener {
-            if (!isValidSelection()) {
+            if (!isValidSelection(3)) {
                 return@setOnClickListener
             }
             viewModel.selCountry?.value?.let { states ->
@@ -94,7 +94,7 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
         }
 
         binding.txtItem.setOnClickListener {
-            if (!isValidSelection()) {
+            if (!isValidSelection(4)) {
                 return@setOnClickListener
             }
             viewModel.selCategory?.value?.let { items ->
@@ -111,24 +111,24 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
         }
     }
 
-    private fun isValidSelection(): Boolean {
+    private fun isValidSelection(step: Int): Boolean {
         when {
-            viewModel.selManufacturer == null -> {
+            step <= 1 && viewModel.selManufacturer == null -> {
                 binding.root.showWarning("Please Select Manufacturer first!!")
                 return false
             }
 
-            viewModel.selCategory == null -> {
+            step <= 2 && viewModel.selCategory == null -> {
                 binding.root.showWarning("Please Select Category first!!")
                 return false
             }
 
-            viewModel.selCountry == null -> {
+            step <= 3 && viewModel.selCountry == null -> {
                 binding.root.showWarning("Please Select Manufacturer first!!")
                 return false
             }
 
-            viewModel.selState == null -> {
+            step <= 4 && viewModel.selState == null -> {
                 binding.root.showWarning("Please Select Manufacturer first!!")
                 return false
             }
