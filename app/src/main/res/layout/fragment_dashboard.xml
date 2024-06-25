@@ -340,7 +340,7 @@
             android:textColor="@color/text_dark_grey" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtBuildingCost"
+            android:id="@+id/txtBuildingName"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

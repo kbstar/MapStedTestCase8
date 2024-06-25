@@ -12,7 +12,10 @@ import com.mapsted.mapstedtceight.network.models.BuildingData
 import com.mapsted.mapstedtceight.session.SessionPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,7 +41,7 @@ class DashboardViewModel @Inject constructor(
     var countryStates: HashMap<String, MutableSet<String>> = HashMap()
 
     //state of calculation changes
-    val statePurchaseDetails = MutableStateFlow(PurchaseDetails())
+    val statePurchaseDetails = MutableSharedFlow<PurchaseDetails>()
 
     //data holding state of ViewModel and API calls
     val stateBuildingsAnalyticalData = MutableStateFlow<ApiCallState<BuildingsAnalyticalData>>(ApiCallState.Idle())
@@ -142,7 +145,7 @@ class DashboardViewModel @Inject constructor(
 
     fun calculateTotalPurchases() {
         val result = PurchaseDetails()
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             buildingsAnalyticalData.analytics.forEach { data ->
                 if (!result.totalByManufactures.keys.contains(data.manufacturer)) {
                     result.totalByManufactures[data.manufacturer] = 0.0
@@ -161,15 +164,30 @@ class DashboardViewModel @Inject constructor(
                             result.itemPurchaseCount[purchase.itemId] = 0
                         }
 
-                        result.totalByManufactures[data.manufacturer] = (result.totalByManufactures[data.manufacturer] ?: 0.0) + purchase.cost
-                        result.totalByCategory[purchase.itemCategoryId] = (result.totalByCategory[purchase.itemCategoryId] ?: 0.0) + purchase.cost
-                        result.totalByBuilding[info.buildingId] = (result.totalByBuilding[info.buildingId] ?: 0.0) + purchase.cost
-                        result.itemPurchaseCount[purchase.itemId] = (result.itemPurchaseCount[purchase.itemId] ?: 1) + 1
+                        selManufacturer?.let { manufactur ->
+                            selCategory?.key?.let { category ->
+                                if (manufactur == data.manufacturer) {
+                                    result.totalByManufactures[data.manufacturer] = (result.totalByManufactures[data.manufacturer] ?: 0.0) + purchase.cost
+                                    result.totalByBuilding[info.buildingId] = (result.totalByBuilding[info.buildingId] ?: 0.0) + purchase.cost
+
+                                    if (purchase.itemCategoryId == category) {
+                                        result.totalByCategory[purchase.itemCategoryId] = (result.totalByCategory[purchase.itemCategoryId] ?: 0.0) + purchase.cost
+                                        result.itemPurchaseCount[purchase.itemId] = (result.itemPurchaseCount[purchase.itemId] ?: 1) + 1
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
 
-            statePurchaseDetails.value = result
+            result.totalByBuilding.maxBy { it.value }.key.let { buildingId ->
+                buildingsAnalyticalData.buildings.find { it.id == buildingId }?.let { buildingData ->
+                    result.buildingNameWithHighPurchase = buildingData.name
+                }
+            }
+
+            statePurchaseDetails.emit(result)
         }
     }
 }

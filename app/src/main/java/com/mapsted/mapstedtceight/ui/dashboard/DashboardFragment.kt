@@ -189,9 +189,11 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
                         "$%.2f", (purchaseDetails.totalByCategory[categoryId] ?: 0.0).toFloat()
                     )
                 }
-                viewModel.selItemId.let { itemId ->
-                    binding.txtItemCount.text = (purchaseDetails.itemPurchaseCount[itemId] ?: 0).toString()
+                if (viewModel.selItemId != 0L) {
+                    binding.txtItemCount.text = (purchaseDetails.itemPurchaseCount[viewModel.selItemId] ?: 0).toString()
                 }
+
+                binding.txtBuildingName.text = purchaseDetails.buildingNameWithHighPurchase
             }
         }
     }
