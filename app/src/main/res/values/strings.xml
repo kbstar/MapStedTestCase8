@@ -1,3 +1,32 @@
 <resources>
-    <string name="app_name">MapSted TC8</string>
+    <string name="app_name">Mapsted TC8</string>
+
+    <string name="no_internet_connection">Please check your Network Settings and try again</string>
+    <string name="server_connect_error">Unable to connect with the server</string>
+    <string name="server_connection_timeout_error">Unable to connect with the server or internet is slow</string>
+    <string name="something_went_wrong">Looks like something went wrong or there was an internal error</string>
+
+    <string name="title">Title</string>
+    <string name="okay">OK</string>
+    <string name="oops">Oops!</string>
+    <string name="view">View</string>
+    <string name="hide">Hide</string>
+    <string name="show">Show</string>
+    <string name="or">Or</string>
+    <string name="start">Start</string>
+    <string name="option">Option</string>
+    <string name="_continue">Continue</string>
+    <string name="language">Language</string>
+    <string name="no_thanks">No Thanks</string>
+    <string name="add">Add</string>
+    <string name="remove">Remove</string>
+    <string name="search">Search</string>
+    <string name="total">Total</string>
+    <string name="save">Save</string>
+    <string name="Cancel">Cancel</string>
+    <string name="info">Info</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="exit">Exit</string>
+
 </resources>

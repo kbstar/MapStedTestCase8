@@ -16,12 +16,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        mavenCentral()
         maven(url = "https://jitpack.io")
-        maven(url = "https://oss.jfrog.org/libs-snapshot")
-        maven(url = "https://repo1.maven.org/maven2")
     }
 }
 
-rootProject.name = "MapSted TC8"
+rootProject.name = "Mapsted TC8"
 include(":app")

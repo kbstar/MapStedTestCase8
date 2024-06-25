@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="theme_light_blue">#FFA4EBF5</color>
+    <color name="theme_light_grey">#FFF3F3F3</color>
+    <color name="theme_dark_grey">#FFD0D7DF</color>
+
+    <color name="theme_black">#FF000000</color>
+    <color name="theme_white">#FFFFFFFF</color>
+
+    <color name="text_light_grey">#FF7B8D93</color>
+    <color name="text_dark_grey">#FF43484A</color>
 </resources>

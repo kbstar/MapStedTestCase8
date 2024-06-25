@@ -1,9 +1,50 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.MapStedTC8" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Theme.MapstedTestCase" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/theme_light_blue</item>
+        <item name="colorPrimaryVariant">@color/theme_light_blue</item>
+        <item name="colorOnPrimary">@color/theme_white</item>
+
+        <item name="colorSecondary">@color/theme_light_blue</item>
+        <item name="colorSecondaryVariant">@color/theme_light_blue</item>
+        <item name="colorOnSecondary">@color/theme_black</item>
+
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowBackground">@color/theme_white</item>
+
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">@color/theme_white</item>
+        <item name="android:enforceStatusBarContrast" >false</item>
+
+        <item name="android:windowLightNavigationBar" >true</item>
+        <item name="android:navigationBarColor">@color/theme_white</item>
+        <item name="android:enforceNavigationBarContrast" >false</item>
+
+        <item name="android:scrollbarSize">0dp</item>
+        <item name="android:overScrollMode">never</item>
     </style>
 
-    <style name="Theme.MapStedTC8" parent="Base.Theme.MapStedTC8" />
+    <style name="Dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="LoadingDialogTheme">
+        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/fade_in_fast</item>
+        <item name="android:windowExitAnimation">@anim/fade_out_fast</item>
+    </style>
 </resources>
