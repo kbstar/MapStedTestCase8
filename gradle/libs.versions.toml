@@ -1,0 +1,36 @@
+[plugins]
+androidApplication = { id = "com.android.application", version = "8.5.0" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version = "1.9.0" }
+daggerHiltAndroid = { id = "com.google.dagger.hilt.android", version = "2.49" }
+navigationSafeArgs = { id = "androidx.navigation.safeargs.kotlin", version = "2.7.7" }
+
+[libraries]
+coreKtxAndroidX = { group = "androidx.core", name = "core-ktx", version = "1.13.1" }
+lifecycleRuntime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = "2.8.2" }
+lifecycleViewModel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version = "2.8.2" }
+activityAndroidX = { group = "androidx.activity", name = "activity-ktx", version = "1.9.0" }
+fragmentAndroidX = { group = "androidx.fragment", name = "fragment-ktx", version = "1.8.0" }
+
+appcompatAndroidX = { group = "androidx.appcompat", name = "appcompat", version = "1.7.0" }
+material = { group = "com.google.android.material", name = "material", version = "1.12.0" }
+constraintlayoutAndroidX = { group = "androidx.constraintlayout", name = "constraintlayout", version = "2.1.4" }
+recyclerview = { group = "androidx.recyclerview", name = "recyclerview-selection", version = "1.1.0" }
+
+navigationRuntimeKTX = { group = "androidx.navigation", name = "navigation-runtime-ktx", version = "2.7.7" }
+navigationDragmentKTX = { group = "androidx.navigation", name = "navigation-fragment-ktx", version = "2.7.7" }
+navigationUiKTX = { group = "androidx.navigation", name = "navigation-ui-ktx", version = "2.7.7" }
+hiltNavigationFragment = { group = "androidx.hilt", name = "hilt-navigation-fragment", version = "1.2.0" }
+
+gson = { group = "com.google.code.gson", name = "gson", version = "2.10.1" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version = "2.9.0" }
+retrofitGsonConverter = { group = "com.squareup.retrofit2", name = "converter-gson", version = "2.9.0" }
+retrofitConverterScalars = { group = "com.squareup.retrofit2", name = "converter-scalars", version = "2.9.0" }
+okhttpLoggingInterceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version = "5.0.0-alpha.7" }
+
+injectJavaX = { group = "javax.inject", name = "javax.inject", version = "1" }
+hiltAndroid = { group = "com.google.dagger", name = "hilt-android", version = "2.49" }
+hiltCompiler = { group = "com.google.dagger", name = "hilt-compiler", version = "2.49" }
+
+junit = { group = "junit", name = "junit", version = "4.13.2" }
+junitAndroidX = { group = "androidx.test.ext", name = "junit", version = "1.2.0" }
+espressoCoreAndroidX = { group = "androidx.test.espresso", name = "espresso-core", version = "3.6.0" }
