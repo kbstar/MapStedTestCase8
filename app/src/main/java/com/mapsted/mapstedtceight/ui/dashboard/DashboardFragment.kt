@@ -12,6 +12,7 @@ import com.mapsted.mapstedtceight.ui.base.AppFragment
 import com.mapsted.mapstedtceight.utils.showWarning
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @AndroidEntryPoint
 class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboardBinding::inflate) {
@@ -40,33 +41,45 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
                 .setItems(values) { _, which ->
                     viewModel.selManufacturer = values[which]
                     binding.txtManufacturer.text = values[which]
+                    viewModel.calculateTotalPurchases()
                 }
                 .show()
         }
 
         binding.txtCategory.setOnClickListener {
-            val values = viewModel.categories.sorted().map { it.toString() }.toTypedArray()
+            if (!isValidSelection()) {
+                return@setOnClickListener
+            }
+            val values = viewModel.categories.keys.map { it.toString() }.toTypedArray()
             MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(resources.getString(R.string.category))
                 .setItems(values) { _, which ->
-                    viewModel.selItemCategoryId = values[which].toLong()
+                    viewModel.selCategory = viewModel.categories.entries.elementAt(which)
                     binding.txtCategory.text = values[which]
+                    viewModel.calculateTotalPurchases()
                 }
                 .show()
         }
 
         binding.txtCountry.setOnClickListener {
+            if (!isValidSelection()) {
+                return@setOnClickListener
+            }
             val values = viewModel.countryStates.keys.toTypedArray()
             MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(resources.getString(R.string.country))
                 .setItems(values) { _, which ->
                     viewModel.selCountry = viewModel.countryStates.entries.elementAt(which)
                     binding.txtCountry.text = values[which]
+                    viewModel.calculateTotalPurchases()
                 }
                 .show()
         }
 
         binding.txtState.setOnClickListener {
+            if (!isValidSelection()) {
+                return@setOnClickListener
+            }
             viewModel.selCountry?.value?.let { states ->
                 val values = states.sorted().toTypedArray()
                 MaterialAlertDialogBuilder(requireActivity())
@@ -74,12 +87,53 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
                     .setItems(values) { _, which ->
                         viewModel.selState = values[which]
                         binding.txtState.text = values[which]
+                        viewModel.calculateTotalPurchases()
                     }
                     .show()
-            } ?: run {
-                binding.root.showWarning("Please Select Country first!!")
+            }
+        }
+
+        binding.txtItem.setOnClickListener {
+            if (!isValidSelection()) {
                 return@setOnClickListener
             }
+            viewModel.selCategory?.value?.let { items ->
+                val values = items.sorted().map { it.toString() }.toTypedArray()
+                MaterialAlertDialogBuilder(requireActivity())
+                    .setTitle(resources.getString(R.string.state))
+                    .setItems(values) { _, which ->
+                        viewModel.selItemId = values[which].toLong()
+                        binding.txtItem.text = values[which]
+                        viewModel.calculateTotalPurchases()
+                    }
+                    .show()
+            }
+        }
+    }
+
+    private fun isValidSelection(): Boolean {
+        when {
+            viewModel.selManufacturer == null -> {
+                binding.root.showWarning("Please Select Manufacturer first!!")
+                return false
+            }
+
+            viewModel.selCategory == null -> {
+                binding.root.showWarning("Please Select Category first!!")
+                return false
+            }
+
+            viewModel.selCountry == null -> {
+                binding.root.showWarning("Please Select Manufacturer first!!")
+                return false
+            }
+
+            viewModel.selState == null -> {
+                binding.root.showWarning("Please Select Manufacturer first!!")
+                return false
+            }
+
+            else -> return true
         }
     }
 
@@ -102,6 +156,25 @@ class DashboardFragment : AppFragment<FragmentDashboardBinding>(FragmentDashboar
                         hideLoader()
                         showApiError(state.error)
                     }
+                }
+            }
+        }
+        lifecycleScope.launch {
+            viewModel.statePurchaseDetails.collect { purchaseDetails ->
+                viewModel.selManufacturer?.let { manufacturer ->
+                    binding.txtManufacturerCost.text = String.format(
+                        Locale.ENGLISH,
+                        "$%.2f", (purchaseDetails.totalByManufactures[manufacturer] ?: 0.0).toFloat()
+                    )
+                }
+                viewModel.selCategory?.key?.let { categoryId ->
+                    binding.txtCategoryCost.text = String.format(
+                        Locale.ENGLISH,
+                        "$%.2f", (purchaseDetails.totalByCategory[categoryId] ?: 0.0).toFloat()
+                    )
+                }
+                viewModel.selItemId.let { itemId ->
+                    binding.txtItemCount.text = (purchaseDetails.itemPurchaseCount[itemId] ?: 0).toString()
                 }
             }
         }

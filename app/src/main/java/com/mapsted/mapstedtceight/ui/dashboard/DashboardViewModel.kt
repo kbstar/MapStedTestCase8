@@ -3,6 +3,7 @@ package com.mapsted.mapstedtceight.ui.dashboard
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mapsted.mapstedtceight.data.BuildingsAnalyticalData
+import com.mapsted.mapstedtceight.data.PurchaseDetails
 import com.mapsted.mapstedtceight.network.ApiCallState
 import com.mapsted.mapstedtceight.network.NetworkAPI
 import com.mapsted.mapstedtceight.network.ResponseState
@@ -21,20 +22,26 @@ class DashboardViewModel @Inject constructor(
     private val sessionPreferences: SessionPreferences
 ) : ViewModel() {
 
+    //holding all data of original response
     lateinit var buildingsAnalyticalData: BuildingsAnalyticalData
 
-    var selManufacturer: String? =null
-    var selItemCategoryId: Long = 0L
+    //selection values stored
+    var selManufacturer: String? = null
+    var selCategory: Map.Entry<Long, MutableSet<Long>>? = null
     var selCountry: Map.Entry<String, MutableSet<String>>? = null
     var selState: String? = null
     var selItemId: Long = 0L
 
+    //all filtered data from response
     var manufactures: MutableSet<String> = mutableSetOf()
-    var categories: MutableSet<Long> = mutableSetOf()
+    var categories: HashMap<Long, MutableSet<Long>> = HashMap()
     var countryStates: HashMap<String, MutableSet<String>> = HashMap()
 
-    val stateBuildingsAnalyticalData = MutableStateFlow<ApiCallState<BuildingsAnalyticalData>>(ApiCallState.Idle())
+    //state of calculation changes
+    val statePurchaseDetails = MutableStateFlow(PurchaseDetails())
 
+    //data holding state of ViewModel and API calls
+    val stateBuildingsAnalyticalData = MutableStateFlow<ApiCallState<BuildingsAnalyticalData>>(ApiCallState.Idle())
     val stateBuildingData = MutableStateFlow<ApiCallState<List<BuildingData>>>(ApiCallState.Idle())
     val stateAnalyticsData = MutableStateFlow<ApiCallState<List<AnalyticData>>>(ApiCallState.Idle())
 
@@ -117,14 +124,52 @@ class DashboardViewModel @Inject constructor(
             manufactures.add(data.manufacturer)
             data.usageStatics?.sessionInfos?.forEach { info ->
                 info.purchases.forEach { purchase ->
-                    categories.add(purchase.itemCategoryId)
+                    if (!categories.containsKey(purchase.itemCategoryId)) {
+                        categories[purchase.itemCategoryId] = mutableSetOf()
+                    }
+                    categories[purchase.itemCategoryId]?.add(purchase.itemId)
                 }
             }
         }
 
         buildingsAnalyticalData.buildings.forEach { building ->
-            countryStates[building.country] = mutableSetOf()
+            if (!countryStates.containsKey(building.country)) {
+                countryStates[building.country] = mutableSetOf()
+            }
             countryStates[building.country]?.add(building.state)
+        }
+    }
+
+    fun calculateTotalPurchases() {
+        val result = PurchaseDetails()
+        viewModelScope.launch {
+            buildingsAnalyticalData.analytics.forEach { data ->
+                if (!result.totalByManufactures.keys.contains(data.manufacturer)) {
+                    result.totalByManufactures[data.manufacturer] = 0.0
+                }
+
+                data.usageStatics?.sessionInfos?.forEach { info ->
+                    if (!result.totalByBuilding.keys.contains(info.buildingId)) {
+                        result.totalByBuilding[info.buildingId] = 0.0
+                    }
+
+                    info.purchases.forEach { purchase ->
+                        if (!result.totalByCategory.keys.contains(purchase.itemCategoryId)) {
+                            result.totalByCategory[purchase.itemCategoryId] = 0.0
+                        }
+                        if (!result.itemPurchaseCount.keys.contains(purchase.itemId)) {
+                            result.itemPurchaseCount[purchase.itemId] = 0
+                        }
+
+                        result.totalByManufactures[data.manufacturer] = (result.totalByManufactures[data.manufacturer] ?: 0.0) + purchase.cost
+                        result.totalByCategory[purchase.itemCategoryId] = (result.totalByCategory[purchase.itemCategoryId] ?: 0.0) + purchase.cost
+                        result.totalByBuilding[info.buildingId] = (result.totalByBuilding[info.buildingId] ?: 0.0) + purchase.cost
+                        result.itemPurchaseCount[purchase.itemId] = (result.itemPurchaseCount[purchase.itemId] ?: 1) + 1
+                    }
+                }
+            }
+
+            statePurchaseDetails.value = result
         }
     }
 }

@@ -294,7 +294,7 @@
             app:drawableTint="@color/text_light_grey" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtItemCost"
+            android:id="@+id/txtItemCount"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.6"
